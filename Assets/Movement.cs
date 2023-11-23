@@ -7,10 +7,9 @@ public class Movement : MonoBehaviour
     public float moveSpeed = 5f;
     public float jumpHeight;
     public int Size;
-    public GameObject[] DragonPrefab;
     public bool isGrounded;
-    public bool Flying;
-    public bool Stomp;
+    public bool Still;
+
 
     public string BounceBackTag = "POI"; // Set the target tag in the Inspector
     public float radius = 5f; // Set the search radius in the Inspector
@@ -46,10 +45,22 @@ public class Movement : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 0.15f))
         {
             isGrounded = true;
-
+            if (!Still)
+            {
+                //ON Ground run once
+                Stomping();
+                Debug.Log("standing still");
+                Still = true;
+            }else if (Still)
+            {
+                //On Ground run on update
+                
+                
+            }
         }
         else
         {
+            Still = false;
             isGrounded = false;
             Debug.Log("Flying");
 
@@ -63,44 +74,8 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            Stomp = false;
+           
 
-        }
-        // Find all colliders in the specified radius around the player
-        Collider[] colliders = Physics.OverlapSphere(playerPosition, radius);
-
-        // Iterate through the colliders and filter based on the target tag
-        foreach (Collider collider in colliders)
-        {
-            if (collider.CompareTag(BounceBackTag))
-            {
-                // This collider has the specified tag, so it's a target object
-                GameObject targetObject = collider.gameObject;
-
-                // Check if the object is grounded using a script named GroundCheckScript
-                bool isGrounded = targetObject.GetComponent<Bounce>().IsGrounded();
-
-                // Calculate the direction from the target object to the player
-                Vector3 forceDirection = playerPosition - targetObject.transform.position;
-
-                // Calculate a force based on the distance
-                float distance = Vector3.Distance(playerPosition, targetObject.transform.position);
-                float forceMagnitude = forceStrength / (distance + 1f);
-
-                // Check if the object is on the ground and has not been pushed recently
-                if (isGrounded && !targetObject.GetComponent<Bounce>().HasBeenPushed && isMoving && Stomp)
-                {
-                    // Apply the force to push the object upward
-                    targetObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, Mathf.Sqrt(distance * 2f * Mathf.Abs(Physics.gravity.y)), 0f);
-
-                    // Set a flag to indicate that the object has been pushed
-                    targetObject.GetComponent<Bounce>().HasBeenPushed = true;
-                }
-                else //Reset when on air
-                {
-                    targetObject.GetComponent<Bounce>().HasBeenPushed = false;
-                }
-            }
         }
         
     }
@@ -127,7 +102,46 @@ public class Movement : MonoBehaviour
         Debug.Log("Jump");
     }
 
+    void Stomping()
+    {
+        Vector3 playerPosition = transform.position;
+        // Find all colliders in the specified radius around the player
+        Collider[] colliders = Physics.OverlapSphere(playerPosition, radius);
 
+        // Iterate through the colliders and filter based on the target tag
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag(BounceBackTag))
+            {
+                // This collider has the specified tag, so it's a target object
+                GameObject targetObject = collider.gameObject;
+
+                // Check if the object is grounded using a script named GroundCheckScript
+                bool isGrounded = targetObject.GetComponent<Bounce>().IsGrounded();
+
+                // Calculate the direction from the target object to the player
+                Vector3 forceDirection = playerPosition - targetObject.transform.position;
+
+                // Calculate a force based on the distance
+                float distance = Vector3.Distance(playerPosition, targetObject.transform.position);
+                float forceMagnitude = forceStrength / (distance + 1f);
+
+                // Check if the object is on the ground and has not been pushed recently
+                if (isGrounded && !targetObject.GetComponent<Bounce>().HasBeenPushed)
+                {
+                    // Apply the force to push the object upward
+                    targetObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, Mathf.Sqrt(distance * 2f * Mathf.Abs(Physics.gravity.y)), 0f);
+
+                    // Set a flag to indicate that the object has been pushed
+                    targetObject.GetComponent<Bounce>().HasBeenPushed = true;
+                }
+                else //Reset when on air
+                {
+                    targetObject.GetComponent<Bounce>().HasBeenPushed = false;
+                }
+            }
+        }
+    }
 
 
 
