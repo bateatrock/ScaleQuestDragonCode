@@ -13,9 +13,9 @@ public class PlayerNeeds : MonoBehaviour
     public float hungerRate = 1f; // Adjust as drainrate
     public float sleepinessRate = 0.5f; // Adjust as drainrate
 
-    private float currentHunger;
-    private float currentSleepiness;
-    private float currentHealth;
+    public float currentHunger;
+    public float currentSleepiness;
+    public float currentHealth;
 
     void Start()
     {

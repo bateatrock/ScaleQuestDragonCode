@@ -9,7 +9,8 @@ public class Movement : MonoBehaviour
     public int Size;
     public bool isGrounded;
     public bool Still;
-
+    //PlayerArrow
+    private GameObject playerArrow;
 
     public string BounceBackTag = "POI"; // Set the target tag in the Inspector
     public float radius = 5f; // Set the search radius in the Inspector
@@ -21,7 +22,8 @@ public class Movement : MonoBehaviour
 
     private void Start()
     {
-
+        playerArrow = GameObject.Find("Arrow");
+        Camera.main.GetComponent<CameraFollow>().target = transform;
     }
     void Update()
     {
@@ -72,10 +74,13 @@ public class Movement : MonoBehaviour
         {
             Jump();
         }
-        else
+        else if (isMoving)
         {
-           
-
+            playerArrow.SetActive(true);
+        }
+        else if (!isMoving)
+        {
+            playerArrow.SetActive(false);
         }
         
     }
@@ -92,8 +97,15 @@ public class Movement : MonoBehaviour
         // Calculate movement direction in world space
         Vector3 desiredMoveDirection = (forward * moveDirection.z + right * moveDirection.x).normalized;
 
+        // Rotate the player to face the movement direction
+        if (desiredMoveDirection != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(desiredMoveDirection, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, Time.deltaTime * 1000f);
+        }
+
         // Move the player
-        transform.Translate(desiredMoveDirection * moveSpeed * Time.deltaTime);
+        transform.Translate(desiredMoveDirection * moveSpeed * Time.deltaTime, Space.World);
     }
     void Jump()
     {
@@ -144,8 +156,6 @@ public class Movement : MonoBehaviour
     }
 
 
-
-
-
+   
 }
 

@@ -20,16 +20,15 @@ public class AnimalSpawn : MonoBehaviour
             Vector3 randomPosition = GetRandomPositionWithinCube();
 
             // Instantiate the prefab at the random position
-            Instantiate(prefabToSpawn, randomPosition, Quaternion.identity);
+            GameObject spawnedPrefab = Instantiate(prefabToSpawn, randomPosition, Quaternion.identity);
         }
     }
 
     Vector3 GetRandomPositionWithinCube()
     {
         float randomX = Random.Range(transform.position.x - cubeSize.x / 2f, transform.position.x + cubeSize.x / 2f);
-        float randomY = Random.Range(transform.position.y - cubeSize.y / 2f, transform.position.y + cubeSize.y / 2f);
         float randomZ = Random.Range(transform.position.z - cubeSize.z / 2f, transform.position.z + cubeSize.z / 2f);
 
-        return new Vector3(randomX, randomY, randomZ);
+        return new Vector3(randomX, 0, randomZ);
     }
 }
