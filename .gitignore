@@ -17,21 +17,23 @@
 sysinfo.txt
 
 Temp/
-PlayMaker/
 
-Chili4U/
-uTomate/
-uTomate Plan/
-uTomateProjectProperties
+/Assets/PlayMaker/
+/Assets/iTween/
+/Assets/Gizmos/
+/Assets/Photon Unity Networking
+/Assets/Photon Unity Networking.meta
+
+/Assets/Chili4U/
+/Assets/uTomate/
+
+Assets/EditorGUI Style Viewer
 Assets/net.fabrejean
-Assets/PlayMaker Internal tools
+EditorGUI Style Viewer.meta
 net.fabrejean.meta
-PlayMaker Internal tools.meta
-PlayMakerInternalTools.unitypackage
-Assets/CodeStage
-CodeStage.meta
-Builds/OriginalVersion.app
-Builds/PlayMakerVersion.app
+test.unitypackage
+Publishing
 PlayMaker.dll
 PlayMaker.dll.mdb
 PlayMaker.dll.mdb.meta
+PlayMaker.dll.meta
